@@ -116,39 +116,24 @@ const findBasins = (
     column + 1 !== input[row].length ? input[row][column + 1] : null;
   const bottomValue = row + 1 !== input.length ? input[row + 1][column] : null;
 
-  const endOfBasin =  topValue !== null &&
-    topValue !== actualValue + 1 &&
-    topValue !== null &&
-    topValue !== actualValue + 1 &&
-    rightValue !== null &&
-    rightValue !== actualValue + 1 &&
-    bottomValue !== null &&
-    bottomValue !== actualValue + 1
-
-  if (
-   endOfBasin
-  ) {
-    return [...foundItems, { element: actualValue, row, column }];
-  }
-
   let topItems: Item[] = [];
   let leftItems: Item[] = [];
   let rightItems: Item[] = [];
   let bottomItems: Item[] = [];
 
-  if (topValue !== null && topValue === actualValue + 1) {
+  if (topValue !== null && topValue > actualValue ) {
     topItems = findBasins(row - 1, column, input, foundItems);
   }
 
-  if (leftValue !== null && leftValue === actualValue + 1) {
+  if (leftValue !== null && leftValue > actualValue ) {
     leftItems = findBasins(row, column - 1, input, foundItems);
   }
 
-  if (rightValue !== null && rightValue === actualValue + 1) {
+  if (rightValue !== null && rightValue > actualValue) {
     rightItems = findBasins(row, column + 1, input, foundItems);
   }
 
-  if (bottomValue !== null && bottomValue === actualValue + 1) {
+  if (bottomValue !== null && bottomValue > actualValue) {
     bottomItems = findBasins(row + 1, column, input, foundItems);
   }
 
@@ -157,6 +142,7 @@ const findBasins = (
     ...leftItems,
     ...rightItems,
     ...bottomItems,
+    ...foundItems,
     { element: actualValue, row, column },
   ];
 };
@@ -183,8 +169,7 @@ const part2 = (rawInput: string) => {
   });
 
   const sortedBasins = basins.sort((a: number, b: number) => b - a);
-console.log(sortedBasins[1])
-  console.log(fullBasins.find(basin => basin.length === 88))
+
 
   return sortedBasins[0] * sortedBasins[1] * sortedBasins[2];
 };
